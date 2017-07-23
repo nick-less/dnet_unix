@@ -20,6 +20,8 @@
 #include "subs.h"
 #include "net.h"
 
+char *serveradr = "127.0.0.1";
+int port = 1234;
 
 void gwritetcp(int fd, register unsigned char *buf, register long bytes) ;
 
@@ -74,9 +76,9 @@ int NetOpen(void) {
         printf("Could not create socket\n");
     }
          
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_addr.s_addr = inet_addr(serveradr);
     server.sin_family = AF_INET;
-    server.sin_port = htons( 1234 );
+    server.sin_port = htons( port );
  
     //Connect to remote server
     if (connect(socket_fd , (struct sockaddr *)&server , sizeof(server)) < 0) {

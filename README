@@ -4,6 +4,11 @@
 
 			   BSD4.2/4.3 compatible
 
+	This version of dnet unix has been hacked to run on MacOS X and use a TCP socket
+	to connect to port 1234 on localhost. It can be used to connect to a running fs-uae emulator
+	or to a real amiga with a transparent serial to network bridge.
+
+
 	Special note this release: default is to run in 7 bit mode (which
 	uses a special 6 bit encoding to encode binary data).  The -m0
 	option has been added for those who can run over full 8 bit nets.
