@@ -1,0 +1,154 @@
+
+
+			   DNET V2.10 UNIX SIDE
+
+			   BSD4.2/4.3 compatible
+
+	Special note this release: default is to run in 7 bit mode (which
+	uses a special 6 bit encoding to encode binary data).  The -m0
+	option has been added for those who can run over full 8 bit nets.
+
+	DNET (c)Copyright 1987-1989 Matthew Dillon, All Rights Reserved
+
+	Matthew Dillon
+	891 Regal Rd
+	Berkeley, Ca. 94708
+	USA
+
+	...!ihnp4!ucbvax!dillon 	USENET
+	dillon@ucbvax.Berkeley.edu	ARPANET
+	ucbvax.berkeley.edu pub/amiga	ARPANET-FTP
+
+				UNIX SETUP
+
+	The directory structure must remain intact.  simply say MAKE
+	in the main directory and it ought to compile.	There might be
+	minor problems depending on how compatible your UNIX is with
+	BSD4.3 UNIX ..	I have successfully compiled DNet on the following
+	machines:
+
+		    Dec Vax 7xx
+		    Sun 3
+		    Sequent
+
+	(1) Create a directory.  For example, ~/.DNET   WARNING!  This
+	    directory must be on a local partition.  DNET uses a unix
+	    domain socket and these do not work over network fileservers.
+
+	(2) Modify your .cshrc to add the following line:
+
+	    setenv DNETDIR  ~/.DNET/
+
+	    (or wherever you put it.  NOTE! You MUST HAVE THE TRAILING
+	     SLASH!)
+
+	(3) All binaries are usually kept in dnet.unix/bin, add this
+	    directory to your path (in your .cshrc) so DNet can find
+	    the clients.
+
+	(4) Place the file 'dnet.servers' in $DNETDIR.  Modify the file
+	    according to your home directory and where you have put the
+	    servers (usually in dnet.unix/bin).  USE ABSOLUTE PATHS,
+	    DNET.SERVERS DOES NOT UNDERSTAND ~.
+
+	NOTE: You may want to chmod $DNETDIR 700 to disallow any
+	unauthorized access to the network.
+
+
+			     DIALING UP FROM AN AMIGA
+
+	Follow the installation instructions for the Amiga side.  When
+	you dial up the UNIX system you will eventually get a prompt.
+	NOTE!  DNET normally uses 7 bit - even parity for dialing up,
+	then switches to 8 bit no parity for the protocol.  Sometimes
+	the modem or port selector will switch into 7 bit + parity mode
+	and NOT SWITCH OUT.  For this reason, you might want to use the
+	-8 option for the Amiga side of DNET (read the docs in the Amiga
+	section).
+
+	You may have to force parity before running DNet.  To force parity
+	to even use (and do this only if running the -Z2 option from the
+	Amiga side dnet):	      THIS IS NOT NORMALLY DONE.
+
+	% stty -odd
+
+	From the DNET window's CSH prompt, start the protocol with:
+
+	% dnet
+
+	That was easy.	The DNet window should go away and an FTERM window
+	should open.  This does not mean success!  If the FTERM window
+	closes again with the message "unable to connect", it was unable
+	to connect.  There are several possibilities:
+
+	(a) You do not have an 8 bit connection from your amiga to the
+	    UNIX host (DNet must be able to send and receive all 256
+	    character codes).
+
+	(b) You did not setup the DNETDIR enviroment variable properly
+
+	(c) You did not copy dnet.servers into $DNETIDR
+
+	(d) The absolute file path in dnet.servers for server #8192 (that
+	    FTerm tires to connect to) is not correct.
+
+				    KILLING DNET
+
+	In most cases simply turning off the modem will suffice.  You can
+	kill dnet more cleanly with the following sequence:
+
+	(1) From an Amiga CLI, run the QuitDnet command.  This will kill
+	    the packet protocol and cause the remote DNet to exit.  It
+	    will then break the local DNet.
+
+	    You should get the original (small) DNet window and the
+	    original login shell. If you get the DNet window but not the
+	    shell (you can't type), the protocol may still be running on
+	    the other end, in which case it didn't work for some unknown
+	    reason.  Restart the protocol w/ the appropriate menu option
+	    and try 'quitdnet' again.
+
+	(3) logout normally and close the DNet window.  Turn off your
+	    modem.
+
+	    If the kill sequence in (2) does not work, you can simply
+	    hangup the line.
+
+			     HANGING SERVER PROCESSES
+
+	The UNIX side servers are normally left running when the protocol
+	dies.  These are very very very small and take 0 CPU (they are
+	simply waiting for connections).  These servers will still be
+	there when you log in again and DNet will use them.
+
+	You can kill UNIX side servers at any time.
+
+	Many of the same clients and servers exist on the UNIX end as
+	on the Amiga end.  The UNIX end is missing several.  The UNIX
+	end implements two commands called dsoc and draw which can be
+	used to connect to (in cooked or raw tty mode) specific servers
+	(by port #) on the Amiga side.  For example, to connect to the
+	printer server on the amiga side:
+
+	% dsoc 8198
+	This is a test
+	^D
+	%
+
+	Dumps to PRT: on the Amiga "This is a test"  Gee Wiz!
+
+				SECURITY W/ UNIX
+
+	DNet will be as secure as your account, assuming you chmod DNETDIR
+	700 (so nobody else has access to the unix domain sockets).  From
+	Home (on the Amiga), I usually RUN DNET -X , login, start the
+	protocol, and leave it running all day.
+
+	The -X option turns of security (sets all security levels to 9),
+	thus allowing me to drive to the university and at any time from
+	my UNIX account do a getfiles or putfiles from and to my Amiga.
+
+	Refer to the amiga side documentation for more information.
+
+
+

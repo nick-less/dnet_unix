@@ -1,0 +1,91 @@
+
+UNIX/DNETLIB
+
+	UNIX END DNET LIBRARY INTERFACE
+
+	See the server source for good examples of usage.
+
+long	private;
+uword	port
+char 	*buf;
+int 	fd;
+int	res1..5, bytes
+char	pri;
+long	val68, valvax;
+
+private	= DListen(port)				listen on a port (server)
+     fd = DAccept(private)			accept a connection (server)
+	  DNAAccept(private)			don't accept a conn.(server)
+     fd = DOpen(host, port, txpri, rxpri)	open a remote connection (client)
+   res1 = read(fd, buf, bytes)			standard unix read()
+   res2 = gread(fd, buf, bytes)			(see below)
+   res3 = ggread(fd, buf, bytes)		(see below)
+   res4 = write(fd, buf, bytes)			standard unix write()
+   res5 = gwrite(fd, buf, bytes)		(see below)
+	  close(fd);
+
+   val68 = ntohl68(valvax)	convert to and from MC68000 longword format.
+   valvax= htonl68(val68)
+
+
+DListen()	sets up a UNIX domain socket in the current directory unless
+		another is specified by the DNETDIR enviroment variable.
+		Returns a private structure pointer or NULL on error.
+
+		This call will override any existing server for the port in
+		the directory permanently.  It does not cause an existing
+		server to exit, however, and you should be careful to kill
+		old servers before starting new ones.  See the source for a
+		template of correct server code.
+
+DAccept()	Accepts a new connection on the port.  Returns a file 
+		descriptor or a negative value.  This call will block.
+
+DOpen()		Attempt to connect to a port on the remote machine.  Returns
+		a file descriptor or a negative value.  The error is either
+		due to not finding DNET's master port (DNET must be running),
+		or the remote server not running.
+
+		This call looks in the current directory for the master
+		socket unless another is specified by the DNETDIR enviroment 
+		variable.
+
+		Two priorities are specified.  One for sending, and one for
+		receiving data.  A priority is a value -127 to 126 inclusive,
+		with 126 the highest priority.  Normally, priorities range
+		from -80 (file transfers) to +20 (terminal window).
+
+DEof()		Send an EOF without closing the connection.  Currently doesn't
+		work worth shit, so don't use it.
+
+write()		Standard UNIX write call.  But we are dealing with a socket
+		here, so one must be careful of the return value.  (1) WRITE()
+		may not return the # bytes requested to write, but less,
+		(2) WRITE() may return a negative value indicating an error or
+		that it was interrupted or that it would have blocked (if you
+		have got non-blocking IO setup).  (3) WRITE() returns 0 on 
+		socket EOF.
+
+gwrite()	This call will write all the bytes specified, whether the
+		socket is non-blocking or not.  It handles restarting the
+		WRITE() call on EINTR and properly handles EWOULDBLOCK.
+
+		It returns the number bytes requested or fewer on error.  If
+		fewer bytes are returned you should close the socket and exit.
+
+read()		Standard UNIX read call.  But we are still dealing with a 
+		socket here and anything might happen.  READ() can return fewer
+		than the number of bytes requested, 0 on EOF, or a negative
+		number indicating various errors.
+
+gread()		GREAD() handles retrying if the EINTR error occurs.  GREAD()
+		blocks until at least one character is received (or EOF), and
+		does this even if the socket is marked non-blocking.  GREAD()
+		returns 0 on EOF/ERROR.
+
+ggread()	GGREAD() not only retries on EINTR, but will block until ALL
+		the requested bytes are read in, even if the socket is marked
+		non-blocking.  GGREAD() returns -1 on EOF/ERROR.  You can also
+		tell if an EOF/ERROR occured if fewer than the requested 
+		number of bytes are read.
+

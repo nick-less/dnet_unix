@@ -1,0 +1,21 @@
+
+
+UNIX/DSOC
+
+
+DSOC [port#]
+
+	(default: 8196 = AMIGSHELL (CLI window))
+
+	Connect to the remote port but keep the TTY in COOKED mode (normal).
+	The connection will be terminated by killing the process on the UNIX
+	end or typing ^C.  NOTE THAT ^C KILLS DSOC AND IS NOT SENT THROUGH TO
+	THE REMOTE CLI.
+
+	The default port accesses the SCLI server on the Amiga end, which
+	starts up a CLI.  Things work properly only if *MY* PIPE: device is
+	installed on the Amiga.  Things close down properly only if you
+	have a CLI prompt when you exit DSOC.
+
+	The SCLI server currently handles only one connection at a time.
+

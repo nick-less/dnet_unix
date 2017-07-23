@@ -1,0 +1,15 @@
+
+UNIX/DRAW
+
+
+DRAW [port#]
+
+	(default: 8195 = AMIGTERM (talk window))
+
+	Connect to the remote port and place the TTY in RAW mode.  The
+	connection can only be terminated by the remote end, or by killing
+	the process on the UNIX end.
+
+	The default port brings up a 'talk' window on the Amiga.  AMIGATERM
+	will recognize a ^C sent from DRAW and close the connection.
+

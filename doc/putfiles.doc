@@ -1,0 +1,23 @@
+UNIX/PUTFILES
+AMIGA/PUTFILES
+
+	PUTFILES [-dDESTDIR] file/dir file/dir file/dir ..
+
+	File transfer client.  Transfer the specified files and or directories
+	to the destination directory on the remote machine.  For instance:
+
+	unix:  putfiles -dram: charlie.txt /usr/include
+
+	*places the file charlie.txt as ram:charlie.txt, and places the 
+	 directory structure /usr/include as ram:include/(whatever).
+
+	The default destination directory depends on the remote host.  If the
+	destination is an Amiga, the default is DF0: (so you probably always
+	want to specify a -d switch).  On the UNIX end, the default is whatever
+	is set in the file dnet.servers
+
+	Currently, no file compression is done.  I also hope to add 
+	semi-automatic crash recovery (continue download where you left off
+	after a crash), though it should be noted that it is very difficult
+	to crash DNET with random modem noise.
+

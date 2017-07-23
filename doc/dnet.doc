@@ -1,0 +1,25 @@
+
+UNIX/DNET
+
+	DNET [debug] [-m0]
+
+NEW Nov 89:  DNet for both UNIX and AMIGA sides default to 7 bit packet
+	     mode.  If you are running on an 8 bit network use the
+	     -m0 option to defeat 6 bit encoding used to send binary on
+	     a 7 bit network.
+
+	Run the DNET protocol on descriptor 0.  If the enviroment variable
+	DNETDIR exists, DNET will create the rendezvous sockets in the
+	specified directory (DNETDIR must have a hanging slash on it),
+	otherwise the current directory is used.
+
+	DNET also opens a log file (DNET.LOG) in the directory.  If the debug
+	option is given, DNET writes gobs of debugging information to the log.
+
+	Descriptor 0 may be a tty or socket.
+
+	To allow DNET to startup servers on demand, the file "dnet.servers"
+	must exist in the rendezvous directory.
+
+					-Matt
+
